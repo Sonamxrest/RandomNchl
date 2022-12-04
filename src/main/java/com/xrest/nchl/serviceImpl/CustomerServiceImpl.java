@@ -1,13 +1,16 @@
 package com.xrest.nchl.serviceImpl;
 
-import com.xrest.nchl.model.Bank;
 import com.xrest.nchl.model.Customer;
 import com.xrest.nchl.repository.CustomerRepository;
 import com.xrest.nchl.service.CustomerService;
 import com.xrest.nchl.specification.UserSpecBuilder;
 import com.xrest.nchl.utility.CommonUtils;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -16,6 +19,8 @@ import java.util.Map;
 @Service
 public class CustomerServiceImpl extends BaseServiceImpl<Customer, Long> implements CustomerService {
     private final CustomerRepository customerRepository;
+
+
 
     public CustomerServiceImpl(CustomerRepository customerRepository) {
         super(customerRepository);
@@ -46,4 +51,16 @@ public class CustomerServiceImpl extends BaseServiceImpl<Customer, Long> impleme
     }
 
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return customerRepository.getCustomerByUsername(username);
+    }
+
+    @Override
+    public Customer save(Customer customer) {
+        if (ObjectUtils.isEmpty(customer.getId())) {
+            customer.setPassword(new BCryptPasswordEncoder().encode(customer.getPassword()));
+        }
+        return customerRepository.save(customer);
+    }
 }

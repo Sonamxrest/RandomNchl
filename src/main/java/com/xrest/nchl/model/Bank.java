@@ -1,10 +1,11 @@
 package com.xrest.nchl.model;
 
 import com.xrest.nchl.dto.AccountDto;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,7 +1,8 @@
 package com.xrest.nchl.model;
 
-import jakarta.persistence.Entity;
 import lombok.Data;
+
+import javax.persistence.Entity;
 
 @Entity
 @Data
